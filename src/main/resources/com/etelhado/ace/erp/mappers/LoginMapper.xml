@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.etelhado.ace.erp.mappers.LoginMapper">
+    <resultMap id="usuarioResultMap" type="com.etelhado.ace.erp.compartilhado.entidades.Usuario">
+        <id column="id" property="id" />
+        <result column="nome" property="nome" />
+        <result column="login" property="login" />
+        <result column="senha" property="senha" />
+        <result column="ativo" property="ativo" jdbcType="BOOLEAN" />
+        <result column="data_cadastro" property="dataCadastro" />
+        <result column="data_atualizacao" property="dataAtualizacao" />
+        <result column="data_exclusao" property="dataExclusao" />
+        <collection property="setores" ofType="com.etelhado.ace.erp.compartilhado.enums.SetorEnum" resultMap="setorResultMap" />
+    </resultMap>
+    <resultMap id="setorResultMap" type="com.etelhado.ace.erp.compartilhado.enums.SetorEnum">
+        <id property="name" column="setor" />
+    </resultMap>
+    <select id="buscarUsuarioPorLogin" resultMap="usuarioResultMap" parameterType="java.lang.String">
+        SELECT * FROM usuarios u LEFT OUTER JOIN usuario_setores s ON s.usuario_id = u.id  WHERE login = #{login}
+    </select>
+</mapper>
