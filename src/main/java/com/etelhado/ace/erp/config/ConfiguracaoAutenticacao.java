@@ -2,6 +2,7 @@ package com.etelhado.ace.erp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.etelhado.ace.erp.modules.autenticacao.services.LoginService;
@@ -26,22 +28,20 @@ import lombok.AllArgsConstructor;
 public class ConfiguracaoAutenticacao {
     private final LoginService loginService;
     private final ConfiguracaoJwtFilter configuracaoJwtFilter;
-    private final AutenticacaoEntryPoint autenticacaoEntryPoint;
+    private final JwtExceptionHandlerFilter jwtExceptionHandlerFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
+        http.csrf((csrf) -> csrf.disable()).cors((cors) -> cors.disable())
 
+                .addFilterBefore(configuracaoJwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionHandlerFilter, configuracaoJwtFilter.getClass())
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/login").permitAll()
-                        .anyRequest().authenticated()
-
-                ).csrf((csrf) -> csrf.disable()).cors((cors) -> cors.disable())
-
+                        .anyRequest().authenticated())
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider())
-                .exceptionHandling((ex) -> ex.authenticationEntryPoint(autenticacaoEntryPoint))
-                .addFilterBefore(configuracaoJwtFilter, UsernamePasswordAuthenticationFilter.class);
+                .exceptionHandling((ex) -> ex.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.NOT_FOUND)));
 
         return http.build();
 

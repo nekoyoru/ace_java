@@ -18,6 +18,6 @@
         <id property="name" column="setor" />
     </resultMap>
     <select id="buscarUsuarioPorLogin" resultMap="usuarioResultMap" parameterType="java.lang.String">
-        SELECT * FROM usuarios u LEFT OUTER JOIN usuario_setores s ON s.usuario_id = u.id  WHERE login = #{login}
+        SELECT * FROM usuarios u LEFT OUTER JOIN usuario_setores s ON s.usuario_id = u.id  WHERE login = #{login} AND  u.data_exclusao IS null
     </select>
 </mapper>

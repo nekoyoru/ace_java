@@ -3,6 +3,8 @@ package com.etelhado.ace.erp.config;
 import java.io.IOException;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;

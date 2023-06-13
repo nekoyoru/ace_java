@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS usuarios
     ativo character varying(1) DEFAULT 'S' COLLATE pg_catalog."default",
     data_atualizacao timestamp(6) without time zone DEFAULT current_timestamp,
     data_cadastro timestamp(6) without time zone DEFAULT current_timestamp,
-    data_exclusao timestamp(6) without time zone DEFAULT current_timestamp,
+    data_exclusao timestamp(6) without time zone,
     CONSTRAINT usuarios_pkey PRIMARY KEY (id)
 );
 

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.etelhado.ace.erp.mappers.UsuarioMapper">
+    <resultMap id="usuarioResultMap" type="com.etelhado.ace.erp.compartilhado.entidades.Usuario">
+        <id column="id" property="id" />
+        <result column="nome" property="nome" />
+        <result column="login" property="login" />
+        <result column="senha" property="senha" />
+        <result column="ativo" property="ativo" jdbcType="BOOLEAN" />
+        <result column="data_cadastro" property="dataCadastro" />
+        <result column="data_atualizacao" property="dataAtualizacao" />
+        <result column="data_exclusao" property="dataExclusao" />
+        <collection property="setores" ofType="com.etelhado.ace.erp.compartilhado.enums.SetorEnum" resultMap="setorResultMap" />
+    </resultMap>
+    <resultMap id="setorResultMap" type="com.etelhado.ace.erp.compartilhado.enums.SetorEnum">
+        <id property="name" column="setor" />
+    </resultMap>
+    <select id="buscarUsuarioDetalhe" resultMap="usuarioResultMap" parameterType="java.lang.Long">
+        SELECT * FROM usuarios u LEFT OUTER JOIN usuario_setores s ON s.usuario_id = u.id  WHERE id = #{id}
+    </select>
+    <insert id="inserirUsuario" parameterType="com.etelhado.ace.erp.modules.usuario.dto.UsuarioDto">
+        <selectKey keyProperty="id" order="BEFORE">
+             SELECT nextval('usuarios_id_seq');
+        </selectKey>
+        INSERT INTO usuarios(id, login, senha) VALUES (#{id}, #{login}, #{senha});
+        INSERT INTO usuario_setores(usuario_id, setor) VALUES     
+        <foreach collection="setores" item="setor" open="(" separator="),(" close=")">
+                #{id}, #{setor.name}
+        </foreach>
+    </insert>
+    <update id="atualizarUsuario" parameterType="com.etelhado.ace.erp.modules.usuario.dto.UsuarioDto">
+        DELETE FROM usuarios WHERE usuario_id = ${id};
+        INSERT INTO usuario_setores(usuario_id, setor) VALUES  
+        <foreach collection="setores" item="setor" open="(" separator="),(" close=")">
+                #{id}, #{setor.name}
+        </foreach>
+        UPDATE usuarios SET login=#{login}, ativo=#{ativo}, data_atualizacao=current_timestamp, 
+        <if test="senha != null">senha=#{senha}</if>
+        WHERE id = #{id};
+    </update>
+
+    <select id="listarUsuarios" resultType="com.etelhado.ace.erp.modules.usuario.dto.UsuarioListaDto">
+        SELECT u.id, u.login, u.ativo, u.data_atualizacao, u.data_cadastro, u.data_exclusao FROM usuarios u
+    </select>
+</mapper>
