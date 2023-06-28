@@ -3,6 +3,8 @@ package com.etelhado.ace.erp.config;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -18,8 +20,11 @@ import com.etelhado.ace.erp.compartilhado.excecoes.ValidationViolationException;
 import com.etelhado.ace.erp.compartilhado.modelos.ErroValidacaoDto;
 import com.etelhado.ace.erp.compartilhado.modelos.RespostaErroPadraoDto;
 
+
+
 @RestControllerAdvice
 public class ConfiguracaoTratamentoErro {
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<RespostaErroPadraoDto> tratarValidacao(final MethodArgumentNotValidException erro) {
@@ -44,6 +49,7 @@ public class ConfiguracaoTratamentoErro {
         respostaErroPadrao.setClasse(erro.getClass().getSimpleName());
         respostaErroPadrao.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         respostaErroPadrao.setMensagem("Erro interno de servidor");
+        logger.error(erro.getLocalizedMessage(), erro);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(respostaErroPadrao);
     }
 

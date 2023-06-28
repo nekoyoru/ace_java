@@ -30,7 +30,7 @@ public class UsuarioService {
             throw new ValidationViolationException("Falha ao validar usuário", null, new ArrayList<>() {
                 {
                     add(new ErroValidacaoDto("senha", "Os campos são diferentes"));
-                    add(new ErroValidacaoDto("confirma_senha", "Os campos são diferentes"));
+                    add(new ErroValidacaoDto("confirmarSenha", "Os campos são diferentes"));
                 }
             });
         }

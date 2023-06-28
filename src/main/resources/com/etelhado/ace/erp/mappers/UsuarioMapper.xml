@@ -21,7 +21,7 @@
         SELECT * FROM usuarios u LEFT OUTER JOIN usuario_setores s ON s.usuario_id = u.id  WHERE id = #{id}
     </select>
     <insert id="inserirUsuario" parameterType="com.etelhado.ace.erp.modules.usuario.dto.UsuarioDto">
-        <selectKey keyProperty="id" order="BEFORE">
+        <selectKey keyProperty="id" order="BEFORE" resultType="java.lang.Long">
              SELECT nextval('usuarios_id_seq');
         </selectKey>
         INSERT INTO usuarios(id, login, senha) VALUES (#{id}, #{login}, #{senha});
