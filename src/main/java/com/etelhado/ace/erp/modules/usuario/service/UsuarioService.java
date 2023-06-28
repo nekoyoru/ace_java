@@ -32,8 +32,8 @@ public class UsuarioService {
         usuarioMapper.atualizarUsuario(usuarioDto);
     }
 
-    public Collection<UsuarioListaDto> buscarUsuarios() {
-        return usuarioMapper.listarUsuarios();
+    public Collection<UsuarioListaDto> buscarUsuarios(Long id, String login, Boolean ativo) {
+        return usuarioMapper.listarUsuarios(id, login,ativo);
     }
 
     public Optional<Usuario> buscarUsuarioDetalhe(Long id) {

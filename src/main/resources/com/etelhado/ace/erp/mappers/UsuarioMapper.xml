@@ -42,6 +42,15 @@
     </update>
 
     <select id="listarUsuarios" resultType="com.etelhado.ace.erp.modules.usuario.dto.UsuarioListaDto">
-        SELECT u.id, u.login, u.ativo, u.data_atualizacao, u.data_cadastro, u.data_exclusao FROM usuarios u
+        SELECT * FROM usuarios u  WHERE 1=1 
+        <if test="id != null">
+            AND id = #{id}
+        </if>
+        <if test="login != null and login != '' ">
+            AND login = #{login}
+        </if>
+        <if test="ativo != null">
+            AND ativo = #{ativo}
+        </if>
     </select>
 </mapper>

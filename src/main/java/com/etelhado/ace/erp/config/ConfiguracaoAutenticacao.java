@@ -16,6 +16,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.etelhado.ace.erp.modules.autenticacao.services.LoginService;
 
@@ -32,7 +35,7 @@ public class ConfiguracaoAutenticacao {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf((csrf) -> csrf.disable()).cors((cors) -> cors.disable())
+        http.csrf((csrf) -> csrf.disable()).cors((cors) -> cors.configurationSource(corsConfigurationSource()))
 
                 .addFilterBefore(configuracaoJwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtExceptionHandlerFilter, configuracaoJwtFilter.getClass())
@@ -63,5 +66,14 @@ public class ConfiguracaoAutenticacao {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    @Bean
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.applyPermitDefaultValues();
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

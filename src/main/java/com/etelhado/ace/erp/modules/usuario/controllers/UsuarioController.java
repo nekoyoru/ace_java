@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.etelhado.ace.erp.compartilhado.entidades.Usuario;
@@ -28,8 +29,10 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
 
     @GetMapping(path = "")
-    public ResponseEntity<Collection<UsuarioListaDto>> index() {
-        return ResponseEntity.ok(usuarioService.buscarUsuarios());
+    public ResponseEntity<Collection<UsuarioListaDto>> index(@RequestParam(name = "id", required = false) Long id,
+            @RequestParam(name = "login", required = false) String login,
+            @RequestParam(name = "ativo", required = false) Boolean ativo) {
+        return ResponseEntity.ok(usuarioService.buscarUsuarios(id, login, ativo));
     }
 
     @GetMapping(path = "/{id}")

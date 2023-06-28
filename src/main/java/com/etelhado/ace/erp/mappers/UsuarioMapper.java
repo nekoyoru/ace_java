@@ -18,5 +18,5 @@ public interface UsuarioMapper {
 
     public void atualizarUsuario(UsuarioDto usuarioDto);
 
-    public Collection<UsuarioListaDto> listarUsuarios();
+    public Collection<UsuarioListaDto> listarUsuarios(@Param("id") Long id, @Param("login") String login, @Param("ativo") Boolean ativo);
 }
