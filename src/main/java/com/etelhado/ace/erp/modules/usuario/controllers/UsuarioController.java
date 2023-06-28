@@ -14,11 +14,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.etelhado.ace.erp.compartilhado.entidades.Usuario;
+import com.etelhado.ace.erp.compartilhado.excecoes.ValidationViolationException;
 import com.etelhado.ace.erp.compartilhado.modelos.RespostaGenerica;
 import com.etelhado.ace.erp.modules.usuario.dto.UsuarioDto;
+import com.etelhado.ace.erp.modules.usuario.dto.UsuarioFormCadDto;
 import com.etelhado.ace.erp.modules.usuario.dto.UsuarioListaDto;
 import com.etelhado.ace.erp.modules.usuario.service.UsuarioService;
 
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
@@ -46,14 +49,14 @@ public class UsuarioController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/")
-    public ResponseEntity<RespostaGenerica> cadastrarUsuario(@RequestBody UsuarioDto usuarioDto) {
+    public ResponseEntity<RespostaGenerica> cadastrarUsuario(@RequestBody @Valid UsuarioFormCadDto usuarioDto) throws ValidationViolationException {
         usuarioService.inserirUsuario(usuarioDto);
         return ResponseEntity.ok(new RespostaGenerica(200, "Usuário cadastrado com sucesso!"));
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, path = "/")
     public ResponseEntity<RespostaGenerica> atualizarUsuario(@RequestBody UsuarioDto usuarioDto) {
-        usuarioService.inserirUsuario(usuarioDto);
+        usuarioService.atualizarUsuario(usuarioDto);
         return ResponseEntity.ok(new RespostaGenerica(200, "Usuário atualizado com sucesso!"));
     }
 }

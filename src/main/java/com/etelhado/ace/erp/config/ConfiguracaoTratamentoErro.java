@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.etelhado.ace.erp.compartilhado.excecoes.ErroAutenticacao;
+import com.etelhado.ace.erp.compartilhado.excecoes.ValidationViolationException;
 import com.etelhado.ace.erp.compartilhado.modelos.ErroValidacaoDto;
 import com.etelhado.ace.erp.compartilhado.modelos.RespostaErroPadraoDto;
 
@@ -44,6 +45,16 @@ public class ConfiguracaoTratamentoErro {
         respostaErroPadrao.setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         respostaErroPadrao.setMensagem("Erro interno de servidor");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR.value()).body(respostaErroPadrao);
+    }
+
+    @ExceptionHandler(ValidationViolationException.class)
+    public ResponseEntity<RespostaErroPadraoDto> tratarErroViolacao(final ValidationViolationException erro) {
+        final RespostaErroPadraoDto respostaErroPadrao = new RespostaErroPadraoDto();
+        respostaErroPadrao.setClasse(erro.getClass().getSimpleName());
+        respostaErroPadrao.setHttpStatus(HttpStatus.BAD_REQUEST.value());
+        respostaErroPadrao.setMensagem(erro.getMessage());
+        respostaErroPadrao.setValidacoes(erro.getValidacoes());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST.value()).body(respostaErroPadrao);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
