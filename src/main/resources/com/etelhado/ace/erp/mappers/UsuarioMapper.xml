@@ -31,15 +31,18 @@
         </foreach>
     </insert>
     <update id="atualizarUsuario" parameterType="com.etelhado.ace.erp.modules.usuario.dto.UsuarioDto">
-        DELETE FROM usuarios WHERE usuario_id = ${id};
+        DELETE FROM usuario_setores WHERE usuario_id = ${id};
         INSERT INTO usuario_setores(usuario_id, setor) VALUES  
         <foreach collection="setores" item="setor" open="(" separator="),(" close=")">
                 #{id}, #{setor.name}
         </foreach>
-        UPDATE usuarios SET login=#{login}, ativo=#{ativo}, data_atualizacao=current_timestamp, 
-        <if test="senha != null">senha=#{senha}</if>
-        WHERE id = #{id};
+        UPDATE usuarios SET login=#{login}, ativo=#{ativo}, data_atualizacao=current_timestamp WHERE id = #{id};
     </update>
+
+    <update id="inativarUsuario" parameterType="java.lang.Long">
+        UPDATE usuarios SET ativo = 'N' WHERE id = #{id}
+    </update>
+
 
     <select id="listarUsuarios" resultType="com.etelhado.ace.erp.modules.usuario.dto.UsuarioListaDto">
         SELECT * FROM usuarios u  WHERE 1=1 
@@ -52,5 +55,6 @@
         <if test="ativo != null">
             AND ativo = #{ativo}
         </if>
+        ORDER BY id ASC
     </select>
 </mapper>

@@ -56,4 +56,8 @@ public class UsuarioService {
     public Optional<Usuario> buscarUsuarioDetalhe(Long id) {
         return usuarioMapper.buscarUsuarioDetalhe(id);
     }
+
+    public void inativarUsuario(Long id) {
+        usuarioMapper.inativarUsuario(id);
+    }
 }
