@@ -5,14 +5,11 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.etelhado.ace.erp.compartilhado.modelos.RespostaErroPadraoDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -37,7 +34,8 @@ public class JwtExceptionHandlerFilter extends OncePerRequestFilter {
             PrintWriter w = response.getWriter();
             w.write(StringUtils.toEncodedString(
                     objectMapper.writeValueAsString(respostaErroPadraoDto).getBytes(StandardCharsets.UTF_8),
-                    StandardCharsets.UTF_8));
+                    StandardCharsets.UTF_8)
+                );
             w.flush();
         }
     }

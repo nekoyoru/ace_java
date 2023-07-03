@@ -42,8 +42,7 @@ public class LoginController {
     @PostMapping(path = "/login", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TokenResponseDto> realizarLogin(@RequestBody @Valid LoginDto dto) {
         var usuario = loginService.loadUserByUsername(dto.getUsuario());
-        authenticationManager
-                .authenticate(new UsernamePasswordAuthenticationToken(usuario.getUsername(), dto.getSenha()));
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(usuario.getUsername(), dto.getSenha()));
         String token = tokenProvider.criarToken(usuario);
         TokenResponseDto tokenResponseDto = new TokenResponseDto();
         tokenResponseDto.setToken(token);
